@@ -142,96 +142,320 @@ typedef struct {
 } Rule;
 
 /* function declarations */
+
+// Use XGetClassHint to get class and instance names, find the rule with
+// matching names, and apply that rule to the client.
 static void applyrules(Client *c);
+
+// Apply clients size hints to x, y, z, w.
+// If interact is true, calculate with the full screen size.
+// If interact is false, calculate with the monitor size.
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
+
+// If monitor is not null, showhide its stack, arrangemon, and restack.
+// If monitor is null, showhide all mons then arrangemon all mons.
 static void arrange(Monitor *m);
+
+// Copy layout symbol from selected layout, then use that layouts arrange
+// function (if available)
 static void arrangemon(Monitor *m);
+
+// Make client the top client in its monitor's clients list.
 static void attach(Client *c);
+
+// Make client the top client in its monitor's stack list.
 static void attachstack(Client *c);
+
+// ButtonPress event handler.
 static void buttonpress(XEvent *e);
+
+// Set SubstructureRedirectMask which triggers an error if there's any other
+// window managers running
 static void checkotherwm(void);
+
+// :TODO:
 static void cleanup(void);
+
+// Remove monitor from the monitors list, unmap and destroy its window then
+// free the monitor
 static void cleanupmon(Monitor *mon);
+
+// ClientMessage event handler.
+// Get the client for the event window. If the message is NetWMFullscreen or
+// NetActiveWindow then call setfullscreen or seturgent respectively.
 static void clientmessage(XEvent *e);
+
+// XSendEvent StructureNotifyMask based on the clients settings.
 static void configure(Client *c);
+
+// ConfigureNotify event handler.
 static void configurenotify(XEvent *e);
+
+// ConfigureRequest event handler.
 static void configurerequest(XEvent *e);
+
+// Allocate and initialise a monitor
 static Monitor *createmon(void);
+
+// DestroyNotify event handler.
 static void destroynotify(XEvent *e);
+
+// Remove the client from its monitor's clients list.
 static void detach(Client *c);
+
+// Remove the client from its monitor's stack list.
 static void detachstack(Client *c);
+
+// :TODO:
 static Monitor *dirtomon(int dir);
+
+// :TODO:
 static void drawbar(Monitor *m);
+
+// drawbar for all monitors
 static void drawbars(void);
+
+// EnterNotify event handler.
 static void enternotify(XEvent *e);
+
+// Expose event handler.
 static void expose(XEvent *e);
+
+// If c is null or not visible, c is first visible client in selmons
+// stack.
+// If selmon's selected client is not c, unfocus selected client.
+// Set selmon as c's monitor, detach from old monitors stack, attach to selmons
+// stack, grab buttons, set focus, set selmons selected to c then draw bars.
 static void focus(Client *c);
+
+// FocusIn event handler.
 static void focusin(XEvent *e);
+
+// Key handler (ALT+, {.i=-1}) (ALT+. {.i=+1})
 static void focusmon(const Arg *arg);
+
+// Key handler (ALT+j {.i=+i}) (ALT+k {.i=-1})
 static void focusstack(const Arg *arg);
+
+// Get x and y from calling XQueryPointer on root.
 static int getrootptr(int *x, int *y);
+
+// :TODO:
 static long getstate(Window w);
+
+// :TODO:
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
+
+// :TODO:
 static void grabbuttons(Client *c, int focused);
+
+// :TODO:
 static void grabkeys(void);
+
+// Key handler (ALT+i {.i=+1}) (ALT+d {.i=-1})
+//
+// Inc/decrement selmon's nmaster, then arrange selmon.
 static void incnmaster(const Arg *arg);
+
+// KeyPress event handler.
+//
+// Calls the configured key handler.
 static void keypress(XEvent *e);
+
+// Key handler (ALT+SHIFT+c)
+//
+// Kills selmon's selected client
 static void killclient(const Arg *arg);
+
+// Allocate and initialise a new client, add it to selmon.
 static void manage(Window w, XWindowAttributes *wa);
+
+// MappingNotify event handler.
 static void mappingnotify(XEvent *e);
+
+// MapRequest event handler.
 static void maprequest(XEvent *e);
+
+// Layout handler ("[M]"")
 static void monocle(Monitor *m);
+
+// MotionNotify event handler.
 static void motionnotify(XEvent *e);
+
+// Button handler (ClkClientWin+ALT+Button1)
 static void movemouse(const Arg *arg);
+
+// Get the next visible, not floating client
 static Client *nexttiled(Client *c);
+
+// Move client to the top of its monitor's stack, focus it, then arrage its
+// monitor
 static void pop(Client *);
+
+// PropertyNotify event handler.
 static void propertynotify(XEvent *e);
+
+// Key handler (ALT+SHIFT+q)
+//
+// Exit dwm
 static void quit(const Arg *arg);
+
+// :TODO:
 static Monitor *recttomon(int x, int y, int w, int h);
+
+// Apply size hints, then if that changes the values, resize the client.
 static void resize(Client *c, int x, int y, int w, int h, int interact);
+
+// Reconfigure the client with new sizes.
 static void resizeclient(Client *c, int x, int y, int w, int h);
+
+// Button handler (ClkClientWin+ALT+Button3)
+//
+// Resize the client by mouse
 static void resizemouse(const Arg *arg);
+
+// :TODO:
 static void restack(Monitor *m);
+
+// Main loop
 static void run(void);
+
+// :TODO:
 static void scan(void);
+
+// :TODO:
 static int sendevent(Client *c, Atom proto);
+
+// :TODO:
 static void sendmon(Client *c, Monitor *m);
+
+// :TODO:
 static void setclientstate(Client *c, long state);
+
+// :TODO:
 static void setfocus(Client *c);
+
+// :TODO:
 static void setfullscreen(Client *c, int fullscreen);
+
+// Key handler (ALT+t {.v=&layouts[0]}) (ALT+f {.v=&layouts[1]})
+// (ALT+m {.v=&layouts[2]}) (ALT+space {0})
+//
+// Button handler (ClkLtSymbol+Button1 {0})
+// (ClkLySymbol+Button3 {.v=&layouts[2]})
 static void setlayout(const Arg *arg);
+
+// Key handler (ALT+h {.f=-0.05}) (ALT+l {.f=+0.05})
 static void setmfact(const Arg *arg);
+
+// :TODO:
 static void setup(void);
+
+// :TODO:
 static void seturgent(Client *c, int urg);
+
+// :TODO:
 static void showhide(Client *c);
+
+// :TODO:
 static void sigchld(int unused);
+
+// Key handler (ALT+p {.v=dmenucmd}) (ALT+SHIFT+Return {.v=termcmd})
+//
+// Button handler (ClkStatusText+Button2 {.v=termcmd})
 static void spawn(const Arg *arg);
+
+// Key handler (ALT+SHIFT+0 {.ui=~0}) (ALT+SHIFT+1..9 {.ui=1<<1..9})
+//
+// Button handler (ClkTagBar+ALT+Button1 {0})
 static void tag(const Arg *arg);
+
+// Key handler (ALT+SHIFT+, {.i=-1}) (ALT+SHIFT+. {.i=+1})
 static void tagmon(const Arg *arg);
+
+// Layout handler ("[]=")
 static void tile(Monitor *);
+
+// Key handler (ALT+b)
 static void togglebar(const Arg *arg);
+
+// Key handler (ALT+SHIFT+space)
+//
+// Button handler (ClkClientWin+ALT+Button2)
 static void togglefloating(const Arg *arg);
+
+// Key handler (CTRL+ALT+SHIFT+1..9 {.ui=1<<1..9})
+//
+// Button handler (ClkTagBar+ALT+Button3 {0})
 static void toggletag(const Arg *arg);
+
+// Key handler (CTRL+ALT+1..9 {.ui=1<<1..9})
+//
+// Button handler (ClkTagBar+Button3 {0})
 static void toggleview(const Arg *arg);
+
+// :TODO:
 static void unfocus(Client *c, int setfocus);
+
+// :TODO:
 static void unmanage(Client *c, int destroyed);
+
+// UnmapNotify event handler.
 static void unmapnotify(XEvent *e);
+
+// :TODO:
 static void updatebarpos(Monitor *m);
+
+// :TODO:
 static void updatebars(void);
+
+// :TODO:
 static void updateclientlist(void);
+
+// :TODO:
 static int updategeom(void);
+
+// :TODO:
 static void updatenumlockmask(void);
+
+// :TODO:
 static void updatesizehints(Client *c);
+
+// :TODO:
 static void updatestatus(void);
+
+// :TODO:
 static void updatetitle(Client *c);
+
+// :TODO:
 static void updatewindowtype(Client *c);
+
+// :TODO:
 static void updatewmhints(Client *c);
+
+// Key handler (ALT+Tab {0}) (ALT+0 {.ui=~0}) (ALT+1..9 {.ui=1<<1..9})
+//
+// Button handler (ClkTagBar+Button1 {0})
 static void view(const Arg *arg);
+
+// :TODO:
 static Client *wintoclient(Window w);
+
+// :TODO:
 static Monitor *wintomon(Window w);
+
+// Error handler.
 static int xerror(Display *dpy, XErrorEvent *ee);
+
+// Error handler for intentionally ignoring errors.
 static int xerrordummy(Display *dpy, XErrorEvent *ee);
+
+// Error handler for startup.
 static int xerrorstart(Display *dpy, XErrorEvent *ee);
+
+// Key handler (ALT+Return)
+//
+// Button handler (ClkWinTitle+Button2)
 static void zoom(const Arg *arg);
 
 /* variables */
